@@ -1,0 +1,236 @@
+==================
+If expression
+==================
+
+fn f() {
+    let x = if a > 0 { 1 } else { 0 };
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (if_expression
+          condition: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (literal (integer_literal)))
+          consequence: (block
+            value: (literal (integer_literal)))
+          alternative: (block
+            value: (literal (integer_literal))))))))
+
+==================
+If else if chain
+==================
+
+fn f() {
+    if x > 0 {
+        1
+    } else if x < 0 {
+        2
+    } else {
+        0
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (block_expression_statement
+        (if_expression
+          condition: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (literal (integer_literal)))
+          consequence: (block
+            value: (literal (integer_literal)))
+          alternative: (if_expression
+            condition: (binary_expression
+              left: (identifier_expression (identifier))
+              right: (literal (integer_literal)))
+            consequence: (block
+              value: (literal (integer_literal)))
+            alternative: (block
+              value: (literal (integer_literal)))))))))
+
+==================
+While loop
+==================
+
+fn f() {
+    while x < 10 {
+        x += 1;
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (block_expression_statement
+        (while_expression
+          condition: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (literal (integer_literal)))
+          body: (block
+            (expression_statement
+              (binary_expression
+                left: (identifier_expression (identifier))
+                right: (literal (integer_literal))))))))))
+
+==================
+For loop
+==================
+
+fn f() {
+    for i in 0..10 {
+        println(i);
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (block_expression_statement
+        (for_expression
+          variable: (identifier)
+          iterator: (binary_expression
+            left: (literal (integer_literal))
+            right: (literal (integer_literal)))
+          body: (block
+            (expression_statement
+              (call_expression
+                function: (identifier_expression (identifier))
+                arguments: (argument_list
+                  (identifier_expression (identifier)))))))))))
+
+==================
+Loop with break
+==================
+
+fn f() {
+    loop {
+        break;
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (block_expression_statement
+        (loop_expression
+          body: (block
+            (expression_statement
+              (break_expression))))))))
+
+==================
+Continue
+==================
+
+fn f() {
+    while true {
+        continue;
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (block_expression_statement
+        (while_expression
+          condition: (boolean_literal)
+          body: (block
+            (expression_statement
+              (continue_expression))))))))
+
+==================
+Match expression
+==================
+
+fn f() {
+    match msg {
+        Message::Quit => 0,
+        Message::Write(text) => 1,
+        _ => 2,
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (block_expression_statement
+        (match_expression
+          scrutinee: (identifier_expression (identifier))
+          (match_arm
+            pattern: (path_pattern (identifier) (identifier))
+            value: (literal (integer_literal)))
+          (match_arm
+            pattern: (tuple_struct_pattern (identifier) (identifier)
+              (identifier_pattern (identifier)))
+            value: (literal (integer_literal)))
+          (match_arm
+            pattern: (wildcard_pattern)
+            value: (literal (integer_literal))))))))
+
+==================
+Return statement
+==================
+
+fn f() -> i32 {
+    return 42;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    return_type: (simple_type (identifier))
+    body: (block
+      (return_statement
+        value: (literal (integer_literal))))))
+
+==================
+Return without value
+==================
+
+fn f() {
+    return;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (return_statement))))

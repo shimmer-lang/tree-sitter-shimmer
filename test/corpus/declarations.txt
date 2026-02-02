@@ -1,0 +1,272 @@
+==================
+Simple function
+==================
+
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier)))
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier))))
+    return_type: (simple_type (identifier))
+    body: (block
+      value: (binary_expression
+        left: (identifier_expression (identifier))
+        right: (identifier_expression (identifier))))))
+
+==================
+Function without return type
+==================
+
+fn greet() {
+    println("hello");
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (expression_statement
+        (call_expression
+          function: (identifier_expression (identifier))
+          arguments: (argument_list
+            (string_literal)))))))
+
+==================
+Generic function
+==================
+
+fn identity<T>(x: T) -> T {
+    x
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    type_parameters: (type_parameter_list (identifier))
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier))))
+    return_type: (simple_type (identifier))
+    body: (block
+      value: (identifier_expression (identifier)))))
+
+==================
+Product type
+==================
+
+type Point = {
+    x: f64,
+    y: f64
+}
+
+---
+
+(source_file
+  (type_declaration
+    (product_type_declaration
+      name: (identifier)
+      (field_declaration
+        name: (identifier)
+        type: (simple_type (identifier)))
+      (field_declaration
+        name: (identifier)
+        type: (simple_type (identifier))))))
+
+==================
+Generic product type
+==================
+
+type Box<T> = {
+    value: T
+}
+
+---
+
+(source_file
+  (type_declaration
+    (product_type_declaration
+      name: (identifier)
+      type_parameters: (type_parameter_list (identifier))
+      (field_declaration
+        name: (identifier)
+        type: (simple_type (identifier))))))
+
+==================
+Sum type
+==================
+
+type Color = Red | Green | Blue;
+
+---
+
+(source_file
+  (type_declaration
+    (sum_type_declaration
+      name: (identifier)
+      (variant name: (identifier))
+      (variant name: (identifier))
+      (variant name: (identifier)))))
+
+==================
+Sum type with data
+==================
+
+type Message = Quit | Write(string) | Move(i32, i32);
+
+---
+
+(source_file
+  (type_declaration
+    (sum_type_declaration
+      name: (identifier)
+      (variant name: (identifier))
+      (variant
+        name: (identifier)
+        (simple_type (identifier)))
+      (variant
+        name: (identifier)
+        (simple_type (identifier))
+        (simple_type (identifier))))))
+
+==================
+Generic sum type
+==================
+
+type Option<T> = Some(T) | None;
+
+---
+
+(source_file
+  (type_declaration
+    (sum_type_declaration
+      name: (identifier)
+      type_parameters: (type_parameter_list (identifier))
+      (variant
+        name: (identifier)
+        (simple_type (identifier)))
+      (variant name: (identifier)))))
+
+==================
+Impl block
+==================
+
+impl Point {
+    fn new(x: f64, y: f64) -> Point {
+        Point { x: x, y: y }
+    }
+
+    fn area(self) -> f64 {
+        self.x * self.y
+    }
+}
+
+---
+
+(source_file
+  (impl_declaration
+    target: (identifier)
+    (function_declaration
+      name: (identifier)
+      parameters: (parameter_list
+        (parameter
+          name: (identifier)
+          type: (simple_type (identifier)))
+        (parameter
+          name: (identifier)
+          type: (simple_type (identifier))))
+      return_type: (simple_type (identifier))
+      body: (block
+        value: (struct_expression
+          name: (identifier)
+          (field_initializer
+            name: (identifier)
+            value: (identifier_expression (identifier)))
+          (field_initializer
+            name: (identifier)
+            value: (identifier_expression (identifier))))))
+    (function_declaration
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter))
+      return_type: (simple_type (identifier))
+      body: (block
+        value: (binary_expression
+          left: (field_expression
+            receiver: (identifier_expression (identifier))
+            field: (identifier))
+          right: (field_expression
+            receiver: (identifier_expression (identifier))
+            field: (identifier)))))))
+
+==================
+Generic impl block
+==================
+
+impl<T> Box {
+    fn get(self) -> T {
+        self.value
+    }
+}
+
+---
+
+(source_file
+  (impl_declaration
+    type_parameters: (type_parameter_list (identifier))
+    target: (identifier)
+    (function_declaration
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter))
+      return_type: (simple_type (identifier))
+      body: (block
+        value: (field_expression
+          receiver: (identifier_expression (identifier))
+          field: (identifier))))))
+
+==================
+Mut self parameter
+==================
+
+impl Point {
+    fn scale(mut self, factor: f64) {
+        self.x *= factor;
+    }
+}
+
+---
+
+(source_file
+  (impl_declaration
+    target: (identifier)
+    (function_declaration
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter)
+        (parameter
+          name: (identifier)
+          type: (simple_type (identifier))))
+      body: (block
+        (expression_statement
+          (binary_expression
+            left: (field_expression
+              receiver: (identifier_expression (identifier))
+              field: (identifier))
+            right: (identifier_expression (identifier))))))))

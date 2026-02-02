@@ -1,0 +1,116 @@
+==================
+Simple type annotation
+==================
+
+fn f() {
+    let x: i32 = 5;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (simple_type (identifier))
+        value: (literal (integer_literal))))))
+
+==================
+Generic type annotation
+==================
+
+fn f() {
+    let x: Option<i32> = None;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (generic_type
+          name: (identifier)
+          type_arguments: (type_argument_list
+            (simple_type (identifier))))
+        value: (identifier_expression (identifier))))))
+
+==================
+Tuple type annotation
+==================
+
+fn f(pair: (i32, f64)) {
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (tuple_type
+          (simple_type (identifier))
+          (simple_type (identifier)))))
+    body: (block)))
+
+==================
+Unit type
+==================
+
+fn f() -> () {
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    return_type: (unit_type)
+    body: (block)))
+
+==================
+Let without initializer
+==================
+
+fn f() {
+    let x: i32;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (simple_type (identifier))))))
+
+==================
+Mutable let
+==================
+
+fn f() {
+    let mut x = 0;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (literal (integer_literal))))))

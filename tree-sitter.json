@@ -1,0 +1,41 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "shimmer",
+      "camelcase": "Shimmer",
+      "title": "Shimmer",
+      "scope": "source.shimmer",
+      "file-types": ["smr"],
+      "injection-regex": "^shimmer$",
+      "highlights": "queries/highlights.scm",
+      "class-name": "TreeSitterShimmer"
+    }
+  ],
+  "metadata": {
+    "version": "0.8.0",
+    "license": "MIT",
+    "description": "The Shimmer programming language",
+    "authors": [
+      {
+        "name": "Jeff Williams",
+        "email": "jeffw@wherethebitsroam.com",
+        "url": ""
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/shimmer-lang/shimmer",
+      "funding": ""
+    }
+  },
+  "bindings": {
+    "c": false,
+    "go": false,
+    "java": false,
+    "node": false,
+    "python": false,
+    "rust": false,
+    "swift": false,
+    "zig": false
+  }
+}

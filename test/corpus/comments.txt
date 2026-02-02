@@ -1,0 +1,49 @@
+==================
+Line comment
+==================
+
+// this is a comment
+fn f() {}
+
+---
+
+(source_file
+  (line_comment)
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block)))
+
+==================
+Block comment
+==================
+
+/* block comment */
+fn f() {}
+
+---
+
+(source_file
+  (block_comment)
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block)))
+
+==================
+Inline comment
+==================
+
+fn f(/* param */ x: i32) {}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (block_comment)
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier))))
+    body: (block)))

@@ -1,0 +1,402 @@
+==================
+Integer literal
+==================
+
+fn f() {
+    let x = 42;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (literal (integer_literal))))))
+
+==================
+Float literal
+==================
+
+fn f() {
+    let x = 3.14;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (literal (float_literal))))))
+
+==================
+String literal
+==================
+
+fn f() {
+    let x = "hello world";
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (string_literal)))))
+
+==================
+String with escapes
+==================
+
+fn f() {
+    let x = "hello\nworld\t\"end\"";
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (string_literal)))))
+
+==================
+Boolean literals
+==================
+
+fn f() {
+    let a = true;
+    let b = false;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (boolean_literal))
+      (let_statement
+        name: (identifier)
+        value: (boolean_literal)))))
+
+==================
+Binary expressions
+==================
+
+fn f() {
+    let x = 1 + 2 * 3;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (binary_expression
+          left: (literal (integer_literal))
+          right: (binary_expression
+            left: (literal (integer_literal))
+            right: (literal (integer_literal))))))))
+
+==================
+Unary expressions
+==================
+
+fn f() {
+    let x = -5;
+    let y = !true;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (unary_expression
+          operand: (literal (integer_literal))))
+      (let_statement
+        name: (identifier)
+        value: (unary_expression
+          operand: (boolean_literal))))))
+
+==================
+Comparison and logical
+==================
+
+fn f() {
+    let x = a > 0 && b < 10;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (binary_expression
+          left: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (literal (integer_literal)))
+          right: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (literal (integer_literal))))))))
+
+==================
+Function call
+==================
+
+fn f() {
+    let x = add(1, 2);
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (call_expression
+          function: (identifier_expression (identifier))
+          arguments: (argument_list
+            (literal (integer_literal))
+            (literal (integer_literal))))))))
+
+==================
+Path call (static method)
+==================
+
+fn f() {
+    let p = Point::new(1.0, 2.0);
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (call_expression
+          function: (path_expression (identifier) (identifier))
+          arguments: (argument_list
+            (literal (float_literal))
+            (literal (float_literal))))))))
+
+==================
+Field access
+==================
+
+fn f() {
+    let x = point.x;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (field_expression
+          receiver: (identifier_expression (identifier))
+          field: (identifier))))))
+
+==================
+Tuple index
+==================
+
+fn f() {
+    let x = pair.0;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (tuple_index_expression
+          receiver: (identifier_expression (identifier))
+          index: (integer_literal))))))
+
+==================
+Struct expression
+==================
+
+fn f() {
+    let p = Point { x: 1.0, y: 2.0 };
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (struct_expression
+          name: (identifier)
+          (field_initializer
+            name: (identifier)
+            value: (literal (float_literal)))
+          (field_initializer
+            name: (identifier)
+            value: (literal (float_literal))))))))
+
+==================
+Tuple expression
+==================
+
+fn f() {
+    let t = (1, 2, 3);
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (tuple_expression
+          (literal (integer_literal))
+          (literal (integer_literal))
+          (literal (integer_literal)))))))
+
+==================
+Range expressions
+==================
+
+fn f() {
+    let a = 0..10;
+    let b = 0..=10;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (binary_expression
+          left: (literal (integer_literal))
+          right: (literal (integer_literal))))
+      (let_statement
+        name: (identifier)
+        value: (binary_expression
+          left: (literal (integer_literal))
+          right: (literal (integer_literal)))))))
+
+==================
+Parenthesized expression
+==================
+
+fn f() {
+    let x = (1 + 2) * 3;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (binary_expression
+          left: (parenthesized_expression
+            (binary_expression
+              left: (literal (integer_literal))
+              right: (literal (integer_literal))))
+          right: (literal (integer_literal)))))))
+
+==================
+Assignment
+==================
+
+fn f() {
+    x = 5;
+    x += 1;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (expression_statement
+        (binary_expression
+          left: (identifier_expression (identifier))
+          right: (literal (integer_literal))))
+      (expression_statement
+        (binary_expression
+          left: (identifier_expression (identifier))
+          right: (literal (integer_literal)))))))
+
+==================
+Unit expression
+==================
+
+fn f() {
+    let x = ();
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (unit_expression)))))
