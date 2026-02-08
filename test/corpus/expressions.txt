@@ -400,3 +400,47 @@ fn f() {
       (let_statement
         name: (identifier)
         value: (unit_expression)))))
+
+==================
+Interpolated string
+==================
+
+fn f() {
+    let x = $"hello {name}";
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (interpolated_string
+          (interpolated_fragment)
+          (interpolation
+            expression: (identifier_expression (identifier))))))))
+
+==================
+Interpolated string with escaped braces
+==================
+
+fn f() {
+    let x = $"braces: {{}}";
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (interpolated_string
+          (interpolated_fragment)
+          (escape_sequence)
+          (escape_sequence))))))

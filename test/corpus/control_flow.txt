@@ -234,3 +234,99 @@ fn f() {
     parameters: (parameter_list)
     body: (block
       (return_statement))))
+
+==================
+Match with literal patterns
+==================
+
+fn f(x: i32) {
+    match x {
+        0 => "zero",
+        1 => "one",
+        _ => "other",
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter name: (identifier) type: (simple_type (identifier))))
+    body: (block
+      (block_expression_statement
+        (match_expression
+          scrutinee: (identifier_expression (identifier))
+          (match_arm
+            pattern: (literal_pattern (integer_literal))
+            value: (string_literal))
+          (match_arm
+            pattern: (literal_pattern (integer_literal))
+            value: (string_literal))
+          (match_arm
+            pattern: (wildcard_pattern)
+            value: (string_literal)))))))
+
+==================
+Match with or-patterns
+==================
+
+fn f(x: i32) {
+    match x {
+        0 | 1 => "small",
+        _ => "big",
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter name: (identifier) type: (simple_type (identifier))))
+    body: (block
+      (block_expression_statement
+        (match_expression
+          scrutinee: (identifier_expression (identifier))
+          (match_arm
+            pattern: (or_pattern
+              (literal_pattern (integer_literal))
+              (literal_pattern (integer_literal)))
+            value: (string_literal))
+          (match_arm
+            pattern: (wildcard_pattern)
+            value: (string_literal)))))))
+
+==================
+Match with pattern guard
+==================
+
+fn f(x: i32) {
+    match x {
+        n if n > 0 => "positive",
+        _ => "non-positive",
+    }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter name: (identifier) type: (simple_type (identifier))))
+    body: (block
+      (block_expression_statement
+        (match_expression
+          scrutinee: (identifier_expression (identifier))
+          (match_arm
+            pattern: (identifier_pattern (identifier))
+            guard: (binary_expression
+              left: (identifier_expression (identifier))
+              right: (literal (integer_literal)))
+            value: (string_literal))
+          (match_arm
+            pattern: (wildcard_pattern)
+            value: (string_literal)))))))

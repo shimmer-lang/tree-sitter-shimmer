@@ -181,6 +181,7 @@ export default grammar({
         $.path_expression,
         $.literal,
         $.string_literal,
+        $.interpolated_string,
         $.boolean_literal,
         $.unit_expression,
         $.tuple_expression,
@@ -221,6 +222,21 @@ export default grammar({
     float_literal: (_$) => /[0-9]+\.[0-9]+/,
 
     string_literal: (_$) => seq('"', repeat(choice(/[^"\\]+/, /\\./)), '"'),
+
+    interpolated_string: ($) =>
+      seq(
+        '$"',
+        repeat(
+          choice($.interpolated_fragment, $.interpolation, $.escape_sequence),
+        ),
+        '"',
+      ),
+
+    interpolated_fragment: (_$) => /[^"\\{}]+/,
+
+    interpolation: ($) => seq("{", field("expression", $._expression), "}"),
+
+    escape_sequence: (_$) => choice(/\\./, "{{", "}}"),
 
     boolean_literal: (_$) => choice("true", "false"),
 
@@ -369,7 +385,12 @@ export default grammar({
       ),
 
     match_arm: ($) =>
-      seq(field("pattern", $._pattern), "=>", field("value", $._expression)),
+      seq(
+        field("pattern", $._pattern),
+        optional(seq("if", field("guard", $._expression))),
+        "=>",
+        field("value", $._expression),
+      ),
 
     block: ($) =>
       seq(
@@ -387,7 +408,9 @@ export default grammar({
 
     _pattern: ($) =>
       choice(
+        $.or_pattern,
         $.wildcard_pattern,
+        $.literal_pattern,
         $.identifier_pattern,
         $.path_pattern,
         $.tuple_struct_pattern,
@@ -408,6 +431,30 @@ export default grammar({
         sepBy(",", $._pattern),
         optional(","),
         ")",
+      ),
+
+    or_pattern: ($) =>
+      seq(
+        optional("|"),
+        $._single_pattern,
+        repeat1(seq("|", $._single_pattern)),
+      ),
+
+    _single_pattern: ($) =>
+      choice(
+        $.wildcard_pattern,
+        $.literal_pattern,
+        $.identifier_pattern,
+        $.path_pattern,
+        $.tuple_struct_pattern,
+      ),
+
+    literal_pattern: ($) =>
+      choice(
+        $.integer_literal,
+        $.float_literal,
+        $.string_literal,
+        $.boolean_literal,
       ),
 
     // ==================== Comments ====================

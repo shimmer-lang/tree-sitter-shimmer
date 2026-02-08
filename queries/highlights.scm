@@ -156,3 +156,17 @@
 ; Parameters
 (parameter
   name: (identifier) @variable.parameter)
+
+; Interpolated strings
+(interpolated_string) @string
+(interpolated_fragment) @string
+(escape_sequence) @string.escape
+
+; Interpolation braces
+(interpolation
+  "{" @punctuation.special
+  "}" @punctuation.special)
+
+; Pattern guard keyword
+(match_arm
+  "if" @keyword)
