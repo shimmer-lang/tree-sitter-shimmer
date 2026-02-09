@@ -270,3 +270,108 @@ impl Point {
               receiver: (identifier_expression (identifier))
               field: (identifier))
             right: (identifier_expression (identifier))))))))
+
+==================
+Trait declaration
+==================
+
+trait Greetable {
+    fn greet(self) -> string;
+}
+
+---
+
+(source_file
+  (trait_declaration
+    name: (identifier)
+    (trait_method
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter))
+      return_type: (simple_type (identifier)))))
+
+==================
+Trait with multiple methods
+==================
+
+trait Shape {
+    fn area(self) -> f64;
+    fn perimeter(self) -> f64;
+}
+
+---
+
+(source_file
+  (trait_declaration
+    name: (identifier)
+    (trait_method
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter))
+      return_type: (simple_type (identifier)))
+    (trait_method
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter))
+      return_type: (simple_type (identifier)))))
+
+==================
+Trait method with parameters
+==================
+
+trait Drawable {
+    fn draw(self, x: i32, y: i32);
+}
+
+---
+
+(source_file
+  (trait_declaration
+    name: (identifier)
+    (trait_method
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter)
+        (parameter
+          name: (identifier)
+          type: (simple_type (identifier)))
+        (parameter
+          name: (identifier)
+          type: (simple_type (identifier)))))))
+
+==================
+Empty trait
+==================
+
+trait Marker {
+}
+
+---
+
+(source_file
+  (trait_declaration
+    name: (identifier)))
+
+==================
+Trait impl
+==================
+
+impl Greetable for Person {
+    fn greet(self) -> string {
+        "hello"
+    }
+}
+
+---
+
+(source_file
+  (impl_declaration
+    trait: (identifier)
+    target: (identifier)
+    (function_declaration
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter))
+      return_type: (simple_type (identifier))
+      body: (block
+        value: (string_literal)))))

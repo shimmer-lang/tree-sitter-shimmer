@@ -4,6 +4,7 @@
   "let"
   "type"
   "impl"
+  "trait"
   "return"
   "if"
   "else"
@@ -112,6 +113,18 @@
 ; Impl target
 (impl_declaration
   target: (identifier) @type)
+
+; Impl trait
+(impl_declaration
+  trait: (identifier) @type)
+
+; Trait declarations
+(trait_declaration
+  name: (identifier) @type)
+
+; Trait method names
+(trait_method
+  name: (identifier) @function)
 
 ; Type parameters
 (type_parameter_list

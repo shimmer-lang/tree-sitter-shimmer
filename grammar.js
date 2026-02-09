@@ -43,7 +43,12 @@ export default grammar({
     // ==================== Declarations ====================
 
     _declaration: ($) =>
-      choice($.function_declaration, $.type_declaration, $.impl_declaration),
+      choice(
+        $.function_declaration,
+        $.type_declaration,
+        $.impl_declaration,
+        $.trait_declaration,
+      ),
 
     function_declaration: ($) =>
       seq(
@@ -94,10 +99,29 @@ export default grammar({
       seq(
         "impl",
         optional(field("type_parameters", $.type_parameter_list)),
+        optional(seq(field("trait", $.identifier), "for")),
         field("target", $.identifier),
         "{",
         repeat($.function_declaration),
         "}",
+      ),
+
+    trait_declaration: ($) =>
+      seq(
+        "trait",
+        field("name", $.identifier),
+        "{",
+        repeat($.trait_method),
+        "}",
+      ),
+
+    trait_method: ($) =>
+      seq(
+        "fn",
+        field("name", $.identifier),
+        field("parameters", $.parameter_list),
+        optional(seq("->", field("return_type", $._type))),
+        ";",
       ),
 
     // ==================== Parameters ====================

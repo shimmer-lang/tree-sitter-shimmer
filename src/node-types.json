@@ -1478,6 +1478,16 @@
           }
         ]
       },
+      "trait": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "type_parameters": {
         "multiple": false,
         "required": false,
@@ -2730,6 +2740,10 @@
           "named": true
         },
         {
+          "type": "trait_declaration",
+          "named": true
+        },
+        {
           "type": "type_declaration",
           "named": true
         }
@@ -2805,6 +2819,80 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "trait_declaration",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "trait_method",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "trait_method",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parameter_list",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "simple_type",
+            "named": true
+          },
+          {
+            "type": "tuple_type",
+            "named": true
+          },
+          {
+            "type": "unit_type",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -3659,6 +3747,10 @@
   },
   {
     "type": "self",
+    "named": false
+  },
+  {
+    "type": "trait",
     "named": false
   },
   {

@@ -9,3 +9,6 @@
 
 (impl_declaration
   target: (identifier) @name) @item
+
+(trait_declaration
+  name: (identifier) @name) @item
