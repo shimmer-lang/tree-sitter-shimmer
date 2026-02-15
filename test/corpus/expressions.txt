@@ -424,6 +424,110 @@ fn f() {
             expression: (identifier_expression (identifier))))))))
 
 ==================
+Closure single parameter
+==================
+
+fn f() {
+    let g: fn(i32) -> i32 = x -> x + 1;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (function_type
+          (simple_type (identifier))
+          return_type: (simple_type (identifier)))
+        value: (closure_expression
+          parameters: (closure_parameters (identifier))
+          body: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (literal (integer_literal))))))))
+
+==================
+Closure multiple parameters
+==================
+
+fn f() {
+    let g: fn(i32, i32) -> i32 = (x, y) -> x + y;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (function_type
+          (simple_type (identifier))
+          (simple_type (identifier))
+          return_type: (simple_type (identifier)))
+        value: (closure_expression
+          parameters: (closure_parameters
+            (identifier)
+            (identifier))
+          body: (binary_expression
+            left: (identifier_expression (identifier))
+            right: (identifier_expression (identifier))))))))
+
+==================
+Closure zero parameters
+==================
+
+fn f() {
+    let g: fn() -> i32 = () -> 42;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (function_type
+          return_type: (simple_type (identifier)))
+        value: (closure_expression
+          parameters: (closure_parameters)
+          body: (literal (integer_literal)))))))
+
+==================
+Closure passed as argument
+==================
+
+fn f() {
+    apply(x -> x * 2, 5);
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (expression_statement
+        (call_expression
+          function: (identifier_expression (identifier))
+          arguments: (argument_list
+            (closure_expression
+              parameters: (closure_parameters (identifier))
+              body: (binary_expression
+                left: (identifier_expression (identifier))
+                right: (literal (integer_literal))))
+            (literal (integer_literal))))))))
+
+==================
 Interpolated string with escaped braces
 ==================
 

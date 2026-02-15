@@ -8,6 +8,7 @@
 // @ts-check
 
 const PREC = {
+  CLOSURE: 0,
   ASSIGN: 1,
   OR: 2,
   AND: 3,
@@ -147,7 +148,7 @@ export default grammar({
     // ==================== Types ====================
 
     _type: ($) =>
-      choice($.simple_type, $.generic_type, $.tuple_type, $.unit_type),
+      choice($.simple_type, $.generic_type, $.tuple_type, $.unit_type, $.function_type),
 
     simple_type: ($) => $.identifier,
 
@@ -160,6 +161,17 @@ export default grammar({
     tuple_type: ($) => seq("(", sepBy1(",", $._type), optional(","), ")"),
 
     unit_type: (_$) => seq("(", ")"),
+
+    function_type: ($) =>
+      seq(
+        "fn",
+        "(",
+        sepBy(",", $._type),
+        optional(","),
+        ")",
+        "->",
+        field("return_type", $._type),
+      ),
 
     // ==================== Statements ====================
 
@@ -225,6 +237,7 @@ export default grammar({
         $.block,
         $.break_expression,
         $.continue_expression,
+        $.closure_expression,
       ),
 
     identifier_expression: ($) => prec(-1, $.identifier),
@@ -422,6 +435,23 @@ export default grammar({
         repeat($._statement),
         optional(field("value", $._expression)),
         "}",
+      ),
+
+    closure_expression: ($) =>
+      prec.right(
+        PREC.CLOSURE,
+        seq(
+          field("parameters", $.closure_parameters),
+          "->",
+          field("body", $._expression),
+        ),
+      ),
+
+    closure_parameters: ($) =>
+      choice(
+        $.identifier,                                                    // x -> ...
+        seq("(", ")"),                                                   // () -> ...
+        seq("(", sepBy1(",", $.identifier), optional(","), ")"),         // (x, y) -> ...
       ),
 
     break_expression: (_$) => "break",

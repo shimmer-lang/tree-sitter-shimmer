@@ -97,6 +97,56 @@ fn f() {
         type: (simple_type (identifier))))))
 
 ==================
+Function type annotation
+==================
+
+fn apply(f: fn(i32) -> i32, x: i32) -> i32 {
+    f(x)
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (function_type
+          (simple_type (identifier))
+          return_type: (simple_type (identifier))))
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier))))
+    return_type: (simple_type (identifier))
+    body: (block
+      value: (call_expression
+        function: (identifier_expression (identifier))
+        arguments: (argument_list
+          (identifier_expression (identifier)))))))
+
+==================
+Function type with no params
+==================
+
+fn f() {
+    let g: fn() -> i32 = todo;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (function_type
+          return_type: (simple_type (identifier)))
+        value: (identifier_expression (identifier))))))
+
+==================
 Mutable let
 ==================
 
