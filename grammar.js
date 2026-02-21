@@ -58,6 +58,7 @@ export default grammar({
         optional(field("type_parameters", $.type_parameter_list)),
         field("parameters", $.parameter_list),
         optional(seq("->", field("return_type", $._type))),
+        optional(field("where_clause", $.where_clause)),
         field("body", $.block),
       ),
 
@@ -69,6 +70,7 @@ export default grammar({
         "type",
         field("name", $.identifier),
         optional(field("type_parameters", $.type_parameter_list)),
+        optional(field("where_clause", $.where_clause)),
         "=",
         "{",
         sepBy(",", $.field_declaration),
@@ -81,6 +83,7 @@ export default grammar({
         "type",
         field("name", $.identifier),
         optional(field("type_parameters", $.type_parameter_list)),
+        optional(field("where_clause", $.where_clause)),
         "=",
         optional("|"),
         sepBy1("|", $.variant),
@@ -102,6 +105,8 @@ export default grammar({
         optional(field("type_parameters", $.type_parameter_list)),
         optional(seq(field("trait", $.identifier), "for")),
         field("target", $.identifier),
+        optional(field("target_type_arguments", $.type_argument_list)),
+        optional(field("where_clause", $.where_clause)),
         "{",
         repeat($.function_declaration),
         "}",
@@ -140,7 +145,27 @@ export default grammar({
     // ==================== Type Parameters & Arguments ====================
 
     type_parameter_list: ($) =>
-      seq("<", sepBy1(",", $.identifier), optional(","), ">"),
+      seq("<", sepBy1(",", $.type_parameter), optional(","), ">"),
+
+    type_parameter: ($) =>
+      seq(
+        field("name", $.identifier),
+        optional(seq(":", field("bounds", $.type_bound_list))),
+      ),
+
+    type_bound_list: ($) => sepBy1("+", $.type_bound),
+
+    type_bound: ($) => $.identifier,
+
+    where_clause: ($) =>
+      seq("where", sepBy1(",", $.where_predicate), optional(",")),
+
+    where_predicate: ($) =>
+      seq(
+        field("type_parameter", $.identifier),
+        ":",
+        field("bounds", $.type_bound_list),
+      ),
 
     type_argument_list: ($) =>
       seq("<", sepBy1(",", $._type), optional(","), ">"),

@@ -58,7 +58,9 @@ fn identity<T>(x: T) -> T {
 (source_file
   (function_declaration
     name: (identifier)
-    type_parameters: (type_parameter_list (identifier))
+    type_parameters: (type_parameter_list
+      (type_parameter
+        name: (identifier)))
     parameters: (parameter_list
       (parameter
         name: (identifier)
@@ -103,7 +105,9 @@ type Box<T> = {
   (type_declaration
     (product_type_declaration
       name: (identifier)
-      type_parameters: (type_parameter_list (identifier))
+      type_parameters: (type_parameter_list
+        (type_parameter
+          name: (identifier)))
       (field_declaration
         name: (identifier)
         type: (simple_type (identifier))))))
@@ -157,7 +161,9 @@ type Option<T> = Some(T) | None;
   (type_declaration
     (sum_type_declaration
       name: (identifier)
-      type_parameters: (type_parameter_list (identifier))
+      type_parameters: (type_parameter_list
+        (type_parameter
+          name: (identifier)))
       (variant
         name: (identifier)
         (simple_type (identifier)))
@@ -229,7 +235,9 @@ impl<T> Box {
 
 (source_file
   (impl_declaration
-    type_parameters: (type_parameter_list (identifier))
+    type_parameters: (type_parameter_list
+      (type_parameter
+        name: (identifier)))
     target: (identifier)
     (function_declaration
       name: (identifier)
@@ -270,6 +278,123 @@ impl Point {
               receiver: (identifier_expression (identifier))
               field: (identifier))
             right: (identifier_expression (identifier))))))))
+
+==================
+Bounded generic function
+==================
+
+fn print_it<T: Display>(x: T) {
+    x
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    type_parameters: (type_parameter_list
+      (type_parameter
+        name: (identifier)
+        bounds: (type_bound_list
+          (type_bound (identifier)))))
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier))))
+    body: (block
+      value: (identifier_expression (identifier)))))
+
+==================
+Multiple bounds with +
+==================
+
+fn foo<T: Display + Clone>(x: T) {
+    x
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    type_parameters: (type_parameter_list
+      (type_parameter
+        name: (identifier)
+        bounds: (type_bound_list
+          (type_bound (identifier))
+          (type_bound (identifier)))))
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier))))
+    body: (block
+      value: (identifier_expression (identifier)))))
+
+==================
+Where clause on function
+==================
+
+fn process<T, U>(x: T, y: U) where T: Display, U: Clone {
+    x
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    type_parameters: (type_parameter_list
+      (type_parameter
+        name: (identifier))
+      (type_parameter
+        name: (identifier)))
+    parameters: (parameter_list
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier)))
+      (parameter
+        name: (identifier)
+        type: (simple_type (identifier))))
+    where_clause: (where_clause
+      (where_predicate
+        type_parameter: (identifier)
+        bounds: (type_bound_list
+          (type_bound (identifier))))
+      (where_predicate
+        type_parameter: (identifier)
+        bounds: (type_bound_list
+          (type_bound (identifier)))))
+    body: (block
+      value: (identifier_expression (identifier)))))
+
+==================
+Bounded impl block
+==================
+
+impl<T: Display> Box<T> {
+    fn show(self) {
+        self
+    }
+}
+
+---
+
+(source_file
+  (impl_declaration
+    type_parameters: (type_parameter_list
+      (type_parameter
+        name: (identifier)
+        bounds: (type_bound_list
+          (type_bound (identifier)))))
+    target: (identifier)
+    target_type_arguments: (type_argument_list
+      (simple_type (identifier)))
+    (function_declaration
+      name: (identifier)
+      parameters: (parameter_list
+        (self_parameter))
+      body: (block
+        value: (identifier_expression (identifier))))))
 
 ==================
 Trait declaration

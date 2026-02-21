@@ -14,6 +14,7 @@
   "loop"
   "match"
   "mut"
+  "where"
 ] @keyword
 
 ; break/continue are anonymous nodes, match via parent
@@ -30,6 +31,7 @@
 (wildcard_pattern) @variable.special
 
 ; Operators
+; The "+" in type bounds (A + B) is also matched here
 [
   "+"
   "-"
@@ -127,7 +129,11 @@
   name: (identifier) @function)
 
 ; Type parameters
-(type_parameter_list
+(type_parameter
+  name: (identifier) @type)
+
+; Trait bounds
+(type_bound
   (identifier) @type)
 
 ; Variant names
