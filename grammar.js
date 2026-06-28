@@ -155,7 +155,7 @@ export default grammar({
 
     type_bound_list: ($) => sepBy1("+", $.type_bound),
 
-    type_bound: ($) => $.identifier,
+    type_bound: ($) => sepBy1("::", $.identifier),
 
     where_clause: ($) =>
       seq("where", sepBy1(",", $.where_predicate), optional(",")),
@@ -175,11 +175,11 @@ export default grammar({
     _type: ($) =>
       choice($.simple_type, $.generic_type, $.tuple_type, $.unit_type, $.function_type),
 
-    simple_type: ($) => $.identifier,
+    simple_type: ($) => sepBy1("::", $.identifier),
 
     generic_type: ($) =>
       seq(
-        field("name", $.identifier),
+        field("name", sepBy1("::", $.identifier)),
         field("type_arguments", $.type_argument_list),
       ),
 

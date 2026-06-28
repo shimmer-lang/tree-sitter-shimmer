@@ -164,3 +164,47 @@ fn f() {
       (let_statement
         name: (identifier)
         value: (literal (integer_literal))))))
+
+==================
+Module-qualified type annotation
+==================
+
+fn f() {
+    let x: Math::Point = p;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (simple_type (identifier) (identifier))
+        value: (identifier_expression (identifier))))))
+
+==================
+Module-qualified generic type annotation
+==================
+
+fn h() {
+    let v: Math::Vec<f64> = p;
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (identifier)
+    parameters: (parameter_list)
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (generic_type
+          name: (identifier)
+          name: (identifier)
+          type_arguments: (type_argument_list
+            (simple_type (identifier))))
+        value: (identifier_expression (identifier))))))
