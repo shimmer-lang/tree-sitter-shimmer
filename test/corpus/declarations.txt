@@ -529,3 +529,54 @@ fn g<T: Graphics::Drawable>(x: T) {
     body: (block
       value: (identifier_expression
         (identifier)))))
+
+==================
+Use declaration (single)
+==================
+
+use pkg::Math::Geometry::Point;
+
+---
+
+(source_file
+  (use_declaration
+    path: (use_path
+      (identifier)
+      (identifier)
+      (identifier)
+      (identifier))))
+
+==================
+Use declaration (alias)
+==================
+
+use Graphics::Color as C;
+
+---
+
+(source_file
+  (use_declaration
+    path: (use_path
+      (identifier)
+      (identifier))
+    alias: (identifier)))
+
+==================
+Use declaration (group with alias)
+==================
+
+use pkg::Math::{length, normalize as norm};
+
+---
+
+(source_file
+  (use_declaration
+    path: (use_path
+      (identifier)
+      (identifier))
+    (use_group
+      (use_item
+        name: (identifier))
+      (use_item
+        name: (identifier)
+        alias: (identifier)))))

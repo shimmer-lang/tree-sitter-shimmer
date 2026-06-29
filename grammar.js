@@ -36,6 +36,8 @@ export default grammar({
     [$.identifier_expression, $.struct_expression],
     // block-bodied expression at end of block could be statement or final value
     [$.block_expression_statement, $._expression],
+    // `use a::b` — after `::`, continue the path or start a `::{ ... }` group
+    [$.use_path],
   ],
 
   rules: {
@@ -45,10 +47,38 @@ export default grammar({
 
     _declaration: ($) =>
       choice(
+        $.use_declaration,
         $.function_declaration,
         $.type_declaration,
         $.impl_declaration,
         $.trait_declaration,
+      ),
+
+    // use pkg::Math::Geometry::Point;
+    // use pkg::Math::Geometry::Point as Pt;
+    // use pkg::Math::Geometry::{Point, Vector as V};
+    use_declaration: ($) =>
+      seq(
+        "use",
+        field("path", $.use_path),
+        optional(
+          choice(
+            seq("as", field("alias", $.identifier)),
+            $.use_group,
+          ),
+        ),
+        ";",
+      ),
+
+    use_path: ($) => sepBy1("::", $.identifier),
+
+    use_group: ($) =>
+      seq("::", "{", sepBy1(",", $.use_item), optional(","), "}"),
+
+    use_item: ($) =>
+      seq(
+        field("name", $.identifier),
+        optional(seq("as", field("alias", $.identifier))),
       ),
 
     function_declaration: ($) =>

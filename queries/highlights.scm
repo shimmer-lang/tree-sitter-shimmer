@@ -5,6 +5,8 @@
   "type"
   "impl"
   "trait"
+  "use"
+  "as"
   "return"
   "if"
   "else"
