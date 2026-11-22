@@ -217,6 +217,10 @@ export default grammar({
 
     unit_type: (_$) => seq("(", ")"),
 
+    // An omitted return type means (). A "->" right after the parameter list belongs to
+    // this function type (fn() -> fn() -> i32 returns fn() -> i32) with no precedence
+    // needed, because no other rule lets "->" follow a type; a rule that does should
+    // surface as a conflict, not be settled by one.
     function_type: ($) =>
       seq(
         "fn",
@@ -224,8 +228,7 @@ export default grammar({
         sepBy(",", $._type),
         optional(","),
         ")",
-        "->",
-        field("return_type", $._type),
+        optional(seq("->", field("return_type", $._type))),
       ),
 
     // ==================== Statements ====================

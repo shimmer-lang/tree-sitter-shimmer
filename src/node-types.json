@@ -1473,7 +1473,7 @@
     "fields": {
       "return_type": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "function_type",
